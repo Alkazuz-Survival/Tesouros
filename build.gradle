@@ -1,0 +1,59 @@
+plugins {
+    id 'java'
+}
+
+group = 'br.alkazuz'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven {
+        name = "spigotmc-repo"
+        url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
+    }
+    maven {
+        name = "sonatype"
+        url = "https://oss.sonatype.org/content/groups/public/"
+    }
+}
+
+dependencies {
+    implementation files('D:\\server 1.5.2 - Copia\\spigot-1.5.2-R1.1-SNAPSHOT.jar')
+    implementation files('D:\\server 1.5.2 - Copia\\plugins\\Vault.jar')
+    implementation files('D:\\server 1.5.2 - Copia\\plugins\\mcMMO.jar')
+    implementation files('D:\\server 1.5.2 - Copia\\plugins\\Correio-1.0.jar')
+}
+
+jar {
+    archiveBaseName = project.name
+    archiveVersion = project.version
+    archiveClassifier = ''
+    destinationDirectory = file("D:\\server 1.5.2 - Copia\\plugins")
+}
+
+def targetJavaVersion = 8
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        options.release.set(targetJavaVersion)
+    }
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}

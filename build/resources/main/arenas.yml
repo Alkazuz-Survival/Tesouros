@@ -1,0 +1,94 @@
+books-title:
+    1: "&aTesouro level 1"
+    2: "&aTesouro level 2"
+    3: "&2Tesouro level 3"
+    4: "&2Tesouro level 4"
+    5: "&eTesouro level 5"
+    6: "&eTesouro level 6"
+    7: "&6Tesouro level 7"
+    8: "&6Tesouro level 8"
+    9: "&cTesouro level 9"
+    10: "&cTesouro level 10"
+    11: "&4Tesouro level 11"
+    12: "&4Tesouro level 12"
+
+books-probability:
+  1:
+    '0-99': 0
+    '101+' : 0.5
+  2:
+    '0-199': 0
+    '201+' : 0.5
+  3:
+    '0-299': 0
+    '301+' : 0.5
+  4:
+    '0-399': 0
+    '401+' : 0.5
+  5:
+    '0-499': 0
+    '501+' : 0.5
+  6:
+    '0-599': 0
+    '601+' : 0.5
+  7:
+    '0-699': 0
+    '701+' : 0.5
+  8:
+    '0-799': 0
+    '801+' : 0.5
+  9:
+    '0-899': 0
+    '901+' : 0.3
+  10:
+    '0-999': 0
+    '1001+': 0.4
+  11:
+    '0-1099': 0
+    '1101+' : 0.2
+  12:
+    '0-1500': 0
+    '1501+' : 0.1
+
+stages:
+  1:
+    pigzombies: 10
+  2:
+    spiders: 10
+  3:
+    zombies: 10
+  4:
+    slimes: 10
+  5:
+    skeletons: 10
+  6:
+    pigzombies: 15
+  7:
+    spiders: 5
+    pigzombies: 15
+  8:
+    zombies: 15
+    pigzombies: 15
+  9:
+    skeletons: 5
+    zombies: 5
+    pigzombies: 5
+  10:
+    blazes: 5
+    skeletons: 5
+    zombies: 5
+    pigzombies: 5
+  11:
+    witches: 5
+    blazes: 5
+    skeletons: 5
+    zombies: 5
+    slimes: 5
+    pigzombies: 5
+  12:
+    witches: 10
+    blazes: 8
+    skeletons: 10
+    zombies: 10
+    slimes: 10
+    pigzombies: 10

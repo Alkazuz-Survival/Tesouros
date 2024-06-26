@@ -1,0 +1,12 @@
+name: Tesouros
+version: '1.0-SNAPSHOT'
+main: br.alkazuz.tesouros.Tesouros
+load: STARTUP
+softdepend:
+  - mcMMO
+  - Vault
+commands:
+  tesouros:
+    description: Comando principal do plugin
+    usage: /tesouros
+    permission: tesouros.admin

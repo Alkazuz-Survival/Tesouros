@@ -1,0 +1,66 @@
+package br.alkazuz.tesouros.commands;
+
+import br.alkazuz.tesouros.config.ArenasSettings;
+import br.alkazuz.tesouros.engines.ArenaTesouro;
+import br.alkazuz.tesouros.engines.ArenasTesouroManager;
+import br.alkazuz.tesouros.itens.TesouroItems;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+public class TesourosCommand implements CommandExecutor {
+
+
+    @Override
+    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+        if (!(commandSender.hasPermission("tesouros.admin"))) {
+            return true;
+        }
+
+        if (!(commandSender instanceof Player)) {
+            return true;
+        }
+
+        if (strings.length == 0) {
+            return true;
+        }
+
+        Player player = (Player) commandSender;
+
+        if (strings[0].equalsIgnoreCase("addarena")) {
+            ArenaTesouro arenaTesouro = new ArenaTesouro(player.getLocation());
+            ArenasTesouroManager.getInstance().addArena(arenaTesouro);
+            ArenasSettings.save(arenaTesouro);
+            player.sendMessage("§aArena adicionada com sucesso!");
+            return true;
+        }
+
+        if (strings[0].equalsIgnoreCase("addlivro")) {
+            if (strings.length == 1) {
+                player.sendMessage("§cUtilize /tesouros addlivro <level>");
+                return true;
+            }
+
+            int level = 0;
+
+            try {
+                level = Integer.parseInt(strings[1]);
+            } catch (NumberFormatException e) {
+                player.sendMessage("§cO level deve ser um número!");
+                return true;
+            }
+
+            if (level < 1 || level > 12) {
+                player.sendMessage("§cO level deve ser entre 1 e 12!");
+                return true;
+            }
+
+            player.getInventory().addItem(TesouroItems.getTesouro(level));
+            player.sendMessage("§aLivro adicionado com sucesso!");
+            return true;
+        }
+
+        return false;
+    }
+}
