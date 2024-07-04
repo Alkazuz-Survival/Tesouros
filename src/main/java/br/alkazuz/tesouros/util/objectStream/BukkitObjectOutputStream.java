@@ -6,7 +6,6 @@ import java.io.OutputStream;
 import java.io.Serializable;
 
 import br.alkazuz.correio.utils.objectStream.BukkitObjectInputStream;
-import br.alkazuz.correio.utils.objectStream.Wrapper;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 /**
@@ -47,7 +46,7 @@ public class BukkitObjectOutputStream extends ObjectOutputStream {
     @Override
     protected Object replaceObject(Object obj) throws IOException {
         if (!(obj instanceof Serializable) && (obj instanceof ConfigurationSerializable)) {
-            obj = br.alkazuz.correio.utils.objectStream.Wrapper.newWrapper((ConfigurationSerializable) obj);
+            obj = Wrapper.newWrapper((ConfigurationSerializable) obj);
         }
 
         return super.replaceObject(obj);

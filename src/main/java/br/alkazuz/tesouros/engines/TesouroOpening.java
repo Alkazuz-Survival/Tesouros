@@ -1,8 +1,11 @@
 package br.alkazuz.tesouros.engines;
 
+import br.alkazuz.correio.object.CorreioItem;
+import br.alkazuz.correio.object.CorreioItemManager;
 import br.alkazuz.tesouros.Tesouros;
 import br.alkazuz.tesouros.config.Settings;
 import br.alkazuz.tesouros.entities.CustomEntities;
+import br.alkazuz.tesouros.itens.TesouroItems;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,11 +21,12 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.UUID;
+import java.util.*;
 
 public class TesouroOpening implements Listener {
     private final Player player;
@@ -72,6 +76,9 @@ public class TesouroOpening implements Listener {
     public void finish() {
         HandlerList.unregisterAll(this);
         TesouroOpeningManager.getInstance().removeTesouro(this);
+        for (Entity entity : getEntities()) {
+            entity.remove();
+        }
     }
 
     public void spawnMobs() {
@@ -124,7 +131,9 @@ public class TesouroOpening implements Listener {
         }
     }
 
-    public boolean hasMobsAlive() {
+    private List<LivingEntity> getEntities() {
+        List<LivingEntity> list = new ArrayList<>();
+
         for (LivingEntity entity : arenaTesouro.getLocation().getWorld().getLivingEntities()) {
             if (entity instanceof Player || entity.isDead()) {
                 continue;
@@ -135,16 +144,27 @@ public class TesouroOpening implements Listener {
             }
 
             if (entity.getMetadata("tesouroid").get(0).asString().equals(uuid.toString())) {
-                return true;
+                list.add(entity);
             }
         }
+        return list;
+    }
 
-        return false;
+    public boolean hasMobsAlive() {
+        return !getEntities().isEmpty();
     }
 
     public void start() {
         player.teleport(arenaTesouro.getLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
-        Bukkit.broadcastMessage("§3[Tesouros] §a" + player.getDisplayName() + " §7está abrindo um tesouro nível §a" + currentLevel + "§7.");
+        Bukkit.broadcastMessage("§3[Tesouros] §a" + player.getDisplayName() + " §7está abrindo um Tesouro Nível §a" + maxLevel + "§7.");
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        if (event.getPlayer() != player) return;
+        CorreioItem correioItem = new CorreioItem(TesouroItems.getTesouro(maxLevel), "CoreMC", player.getName());
+        CorreioItemManager.addCorreioItem(player.getName(), correioItem);
+        finish();
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -191,8 +211,10 @@ public class TesouroOpening implements Listener {
                 if (!livingEntity.hasMetadata("tesouroid")) {
                     return;
                 }
-                livingEntity.setMaxHealth(livingEntity.getMaxHealth() * 3);
+                livingEntity.setMaxHealth(livingEntity.getMaxHealth() * 2);
                 livingEntity.setHealth(livingEntity.getMaxHealth());
+                livingEntity.addPotionEffect(
+                        new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 1));
             }, 1L);
         }
     }

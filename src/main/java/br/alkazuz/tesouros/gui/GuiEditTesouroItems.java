@@ -10,6 +10,7 @@ import br.alkazuz.tesouros.items.TesouroItem;
 import br.alkazuz.tesouros.items.TesouroItemManager;
 import br.alkazuz.tesouros.util.GuiHolder;
 import br.alkazuz.tesouros.util.ItemBuilder;
+import net.milkbowl.vault.chat.Chat;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -23,7 +24,9 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class GuiEditTesouroItems implements Listener {
 
@@ -84,7 +87,7 @@ public class GuiEditTesouroItems implements Listener {
 
         Tesouros.eventWaiter.waitForEvent(
                 AsyncPlayerChatEvent.class,
-                EventPriority.HIGH,
+                EventPriority.LOW,
                 e -> e.getPlayer().equals(player) && isFloat(e.getMessage()),
                 e -> {
                     float chance = Float.parseFloat(e.getMessage());
@@ -98,9 +101,11 @@ public class GuiEditTesouroItems implements Listener {
 
                     tesouroItem.setChance(chance);
                     tesouroItem.save();
-
+                    event.setCancelled(true);
                     player.sendMessage("§aChance do item alterada com sucesso.");
                     open(player, level);
+
+
                 },
                 10 * 20,
                 () -> player.sendMessage("§cTempo esgotado.")
@@ -142,6 +147,8 @@ public class GuiEditTesouroItems implements Listener {
             e.printStackTrace();
         }
 
+        List<TesouroItem> tesouroItems = new ArrayList<>();
+
         for (int i = 0; i < 54; i++) {
             ItemStack item = event.getInventory().getItem(i);
             if (item == null || item.getType() == Material.AIR) {
@@ -150,16 +157,52 @@ public class GuiEditTesouroItems implements Listener {
 
             TesouroItem tesouroItem = new TesouroItem(null, 0, item, level);
 
-            if (TesouroItemManager.getTesouroItemById(level, tesouroItem.getId()) != null) {
-                tesouroItem = TesouroItemManager.getTesouroItemById(level, tesouroItem.getId());
+            float change = 0.0f;
+            Integer id = null;
+
+            if (item.hasItemMeta()) {
+                if (item.getItemMeta().hasLore()) {
+                    for (String lore : item.getItemMeta().getLore()) {
+                        if (lore.contains("Chance:")) {
+                            String[] split = lore.split(" ");
+                            change = Float.parseFloat(ChatColor.stripColor(split[1].replace("%", "")));
+                        }
+
+                        if (lore.startsWith("§8")) {
+                            id = Integer.parseInt(lore.replace("§8", ""));
+                        }
+                    }
+                }
             }
 
-            tesouroItem.setId(null);
+            tesouroItem.setChance(change);
+
+            if (id != null) {
+                tesouroItem.setItemStack(TesouroItemManager.getTesouroItemById(level, id).getItemStack());
+            } else {
+                tesouroItem.setItemStack(item);
+            }
+
+            tesouroItem.setId(i + 1);
 
             tesouroItem.save();
+
+            tesouroItems.add(tesouroItem);
+
         }
 
+        TesouroItemManager.setItens(level, tesouroItems);
+
         player.sendMessage("§aItens salvos com sucesso!");
+    }
+
+    private boolean isInt(String s) {
+        try {
+            Integer.parseInt(s);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
 }

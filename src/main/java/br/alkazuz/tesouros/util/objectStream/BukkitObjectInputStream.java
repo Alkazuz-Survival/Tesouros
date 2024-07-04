@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 
-import br.alkazuz.correio.utils.objectStream.Wrapper;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 
@@ -45,9 +44,9 @@ public class BukkitObjectInputStream extends ObjectInputStream {
 
     @Override
     protected Object resolveObject(Object obj) throws IOException {
-        if (obj instanceof br.alkazuz.correio.utils.objectStream.Wrapper) {
+        if (obj instanceof Wrapper) {
             try {
-                (obj = ConfigurationSerialization.deserializeObject(((br.alkazuz.correio.utils.objectStream.Wrapper) obj).map)).getClass(); // NPE
+                (obj = ConfigurationSerialization.deserializeObject(((Wrapper) obj).map)).getClass(); // NPE
             } catch (Throwable ex) {
                 throw newIOException("Failed to deserialize object", ex);
             }

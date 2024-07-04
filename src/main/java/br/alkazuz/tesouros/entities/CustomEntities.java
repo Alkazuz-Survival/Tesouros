@@ -66,14 +66,14 @@ public class CustomEntities {
            PathfinderGoalSelector goalSelector = getSelector(entity, "goalSelector");
            PathfinderGoalSelector targetSelector = getSelector(entity, "targetSelector");
 
+           resetTargetSelector(targetSelector);
+
            if (entity instanceof EntitySkeleton) {
                EntitySkeleton skeleton = (EntitySkeleton) entity;
                skeleton.setSkeletonType(0);
                skeleton.setEquipment(0, new ItemStack(Item.BOW));
 
                goalSelector.a(4, new PathfinderGoalArrowAttack(skeleton, 0.25F, 20, 60, 15.0F));
-
-               resetTargetSelector(targetSelector);
 
                targetSelector.a(1, new PathfinderGoalNearestAttackableTarget(skeleton, EntityHuman.class, 16.0F, 0, true));
 

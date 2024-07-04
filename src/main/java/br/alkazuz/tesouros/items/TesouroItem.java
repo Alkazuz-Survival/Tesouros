@@ -8,7 +8,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 public class TesouroItem {
-    private Integer id;
+    public Integer id;
     private float chance;
     private ItemStack itemStack;
     private int level;
@@ -22,12 +22,7 @@ public class TesouroItem {
 
     public Integer getId() {
         if (this.id == null) {
-            FileConfiguration config = ConfigManager.getConfig("itens");
-            String key = String.valueOf(level);
-            config.getKeys(false).stream().filter(k -> k.equals(key)).forEach(k -> {
-                this.id = Integer.parseInt(k);
-            });
-            ++this.id;
+           this.id = TesouroItemManager.getNextId(this.level);
         }
         return this.id;
     }
@@ -69,15 +64,28 @@ public class TesouroItem {
     public void save() {
         try {
             FileConfiguration config = ConfigManager.getConfig("itens");
-            String path = String.valueOf(this.level) + "." + this.getId() + ".";
+            Integer nId = this.getId();
+            String path = String.valueOf(this.level) + "." + nId + ".";
             config.set(path + "chance", this.chance);
             config.set(path + "item", Serializer.serializeItemStack(this.itemStack));
             config.set(path + "level", this.level);
+            this.id = nId;
             ConfigManager.saveConfig(config, "itens");
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof TesouroItem) {
+            TesouroItem tesouroItem = (TesouroItem) obj;
+            if (tesouroItem.id != null && this.id != null && tesouroItem.id.equals(this.id)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

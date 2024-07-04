@@ -7,6 +7,7 @@ import br.alkazuz.tesouros.config.manager.ConfigManager;
 import br.alkazuz.tesouros.engines.ArenasTesouroManager;
 import br.alkazuz.tesouros.gui.GuiEditTesouroItems;
 import br.alkazuz.tesouros.gui.MenuConfirmOpen;
+import br.alkazuz.tesouros.items.TesouroItemManager;
 import br.alkazuz.tesouros.itens.TesouroItems;
 import br.alkazuz.tesouros.listener.PlayerInteractListener;
 import br.alkazuz.tesouros.listener.mcMMOListener;
@@ -31,6 +32,7 @@ public final class Tesouros extends JavaPlugin {
         ArenasSettings.load();
         TesouroItems.init();
         loadListeners();
+        TesouroItemManager.load();
         eventWaiter = new EventWaiter(this);
         eventWaiter.addEvents(AsyncPlayerChatEvent.class, InventoryClickEvent.class);
     }

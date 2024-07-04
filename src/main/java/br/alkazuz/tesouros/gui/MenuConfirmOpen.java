@@ -66,7 +66,7 @@ public class MenuConfirmOpen implements Listener {
                 player.closeInventory();
                 return;
             }
-            removeItem(itemInHand);
+            removeItem(itemInHand, player);
             TesouroOpening tesouroOpening = new TesouroOpening(player, arenaTesouro, level);
             TesouroOpeningManager.getInstance().addTesouro(tesouroOpening);
             tesouroOpening.start();
@@ -76,12 +76,14 @@ public class MenuConfirmOpen implements Listener {
         }
     }
 
-    private void removeItem(ItemStack item) {
+    private void removeItem(ItemStack item, Player player) {
         if (item.getAmount() == 1) {
             item.setType(Material.AIR);
+            item.setAmount(0);
         } else {
             item.setAmount(item.getAmount() - 1);
         }
+        player.updateInventory();
     }
 
 }
