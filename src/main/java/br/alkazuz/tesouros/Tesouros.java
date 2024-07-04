@@ -5,15 +5,23 @@ import br.alkazuz.tesouros.config.ArenasSettings;
 import br.alkazuz.tesouros.config.Settings;
 import br.alkazuz.tesouros.config.manager.ConfigManager;
 import br.alkazuz.tesouros.engines.ArenasTesouroManager;
+import br.alkazuz.tesouros.gui.GuiEditTesouroItems;
 import br.alkazuz.tesouros.gui.MenuConfirmOpen;
 import br.alkazuz.tesouros.itens.TesouroItems;
 import br.alkazuz.tesouros.listener.PlayerInteractListener;
 import br.alkazuz.tesouros.listener.mcMMOListener;
+import br.alkazuz.tesouros.util.EventWaiter;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.awt.*;
+
 public final class Tesouros extends JavaPlugin {
     private static Tesouros instance;
+    public static EventWaiter eventWaiter;
     @Override
     public void onEnable() {
         instance = this;
@@ -23,6 +31,8 @@ public final class Tesouros extends JavaPlugin {
         ArenasSettings.load();
         TesouroItems.init();
         loadListeners();
+        eventWaiter = new EventWaiter(this);
+        eventWaiter.addEvents(AsyncPlayerChatEvent.class, InventoryClickEvent.class);
     }
 
     @Override
@@ -36,6 +46,7 @@ public final class Tesouros extends JavaPlugin {
         }
         pm.registerEvents(new PlayerInteractListener(), this);
         pm.registerEvents(new MenuConfirmOpen(), this);
+        pm.registerEvents(new GuiEditTesouroItems(), this);
     }
 
     public static Tesouros getInstance() {

@@ -3,6 +3,7 @@ package br.alkazuz.tesouros.commands;
 import br.alkazuz.tesouros.config.ArenasSettings;
 import br.alkazuz.tesouros.engines.ArenaTesouro;
 import br.alkazuz.tesouros.engines.ArenasTesouroManager;
+import br.alkazuz.tesouros.gui.GuiEditTesouroItems;
 import br.alkazuz.tesouros.itens.TesouroItems;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -33,6 +34,31 @@ public class TesourosCommand implements CommandExecutor {
             ArenasTesouroManager.getInstance().addArena(arenaTesouro);
             ArenasSettings.save(arenaTesouro);
             player.sendMessage("§aArena adicionada com sucesso!");
+            return true;
+        }
+
+        if (strings[0].equalsIgnoreCase("itens")) {
+            if (strings.length == 1) {
+                player.sendMessage("§cUtilize /tesouros itens <level>");
+                return true;
+            }
+
+            int level = 0;
+
+            try {
+                level = Integer.parseInt(strings[1]);
+            } catch (NumberFormatException e) {
+                player.sendMessage("§cO level deve ser um número!");
+                return true;
+            }
+
+            if (level < 1 || level > 12) {
+                player.sendMessage("§cO level deve ser entre 1 e 12!");
+                return true;
+            }
+
+            GuiEditTesouroItems.open(player, level);
+
             return true;
         }
 
