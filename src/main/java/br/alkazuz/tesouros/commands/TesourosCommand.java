@@ -1,14 +1,22 @@
 package br.alkazuz.tesouros.commands;
 
 import br.alkazuz.tesouros.config.ArenasSettings;
+import br.alkazuz.tesouros.config.Settings;
+import br.alkazuz.tesouros.config.manager.ConfigManager;
 import br.alkazuz.tesouros.engines.ArenaTesouro;
 import br.alkazuz.tesouros.engines.ArenasTesouroManager;
 import br.alkazuz.tesouros.gui.GuiEditTesouroItems;
+import br.alkazuz.tesouros.items.TesouroItem;
 import br.alkazuz.tesouros.itens.TesouroItems;
+import br.alkazuz.tesouros.util.Serializer;
+import br.alkazuz.tesouros.util.TesouroItemGenerator;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public class TesourosCommand implements CommandExecutor {
 
@@ -59,6 +67,25 @@ public class TesourosCommand implements CommandExecutor {
 
             GuiEditTesouroItems.open(player, level);
 
+            return true;
+        }
+
+        if (strings[0].equalsIgnoreCase("setspawn")) {
+            Settings.spawnLocation = player.getLocation();
+            FileConfiguration config = ConfigManager
+                    .getConfig("settings");
+            config.set("spawn-location", Serializer.getStringLocation(player.getLocation()));
+            ConfigManager.saveConfig(config, "settings");
+            player.sendMessage("§aSpawn setado com sucesso!");
+            return true;
+        }
+
+        if (strings[0].equalsIgnoreCase("testitens")) {
+            int level = Integer.parseInt(strings[1]);
+            List<TesouroItem> tesouroItems = TesouroItemGenerator.generateTesouroItems(level);
+            for  (TesouroItem tesouroItem : tesouroItems) {
+                player.getInventory().addItem(tesouroItem.getItemStack());
+            }
             return true;
         }
 

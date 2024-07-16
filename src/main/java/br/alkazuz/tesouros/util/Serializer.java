@@ -97,4 +97,12 @@ public class Serializer {
     }
 
 
+    public static Location getLocation(String string) {
+        String[] parts = string.split(";");
+        return new Location(org.bukkit.Bukkit.getWorld(parts[0]), Double.parseDouble(parts[1]), Double.parseDouble(parts[2]), Double.parseDouble(parts[3]));
+    }
+
+    public static String getStringLocation(Location loc) {
+        return loc.getWorld().getName() + ";" + loc.getX() + ";" + loc.getY() + ";" + loc.getZ();
+    }
 }

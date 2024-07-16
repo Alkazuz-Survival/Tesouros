@@ -12,12 +12,29 @@ public class TesouroItem {
     private float chance;
     private ItemStack itemStack;
     private int level;
+    private String concurrence;
 
     public TesouroItem(Integer id, float chance, ItemStack itemStack, int level) {
         this.chance = chance;
         this.itemStack = itemStack;
         this.level = level;
         this.id = id;
+    }
+
+    public TesouroItem(Integer id, float chance, ItemStack itemStack, int level, String concurrence) {
+        this.chance = chance;
+        this.itemStack = itemStack;
+        this.level = level;
+        this.id = id;
+        this.concurrence = concurrence;
+    }
+
+    public String getConcurrence() {
+        return this.concurrence;
+    }
+
+    public void setConcurrence(String concurrence) {
+        this.concurrence = concurrence;
     }
 
     public Integer getId() {
@@ -69,6 +86,9 @@ public class TesouroItem {
             config.set(path + "chance", this.chance);
             config.set(path + "item", Serializer.serializeItemStack(this.itemStack));
             config.set(path + "level", this.level);
+            if (!this.concurrence.isEmpty()) {
+                config.set(path + "concurrence", this.concurrence);
+            }
             this.id = nId;
             ConfigManager.saveConfig(config, "itens");
 

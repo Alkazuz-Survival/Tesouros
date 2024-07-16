@@ -157,7 +157,7 @@ public class GuiEditTesouroItems implements Listener {
 
             TesouroItem tesouroItem = new TesouroItem(null, 0, item, level);
 
-            float change = 0.0f;
+            float chance = 0.0f;
             Integer id = null;
 
             if (item.hasItemMeta()) {
@@ -165,7 +165,7 @@ public class GuiEditTesouroItems implements Listener {
                     for (String lore : item.getItemMeta().getLore()) {
                         if (lore.contains("Chance:")) {
                             String[] split = lore.split(" ");
-                            change = Float.parseFloat(ChatColor.stripColor(split[1].replace("%", "")));
+                            chance = Float.parseFloat(ChatColor.stripColor(split[1].replace("%", "")));
                         }
 
                         if (lore.startsWith("§8")) {
@@ -175,15 +175,15 @@ public class GuiEditTesouroItems implements Listener {
                 }
             }
 
-            tesouroItem.setChance(change);
+            if (id != null)
+                tesouroItem = TesouroItemManager.getTesouroItemById(level, id);
 
-            if (id != null) {
-                tesouroItem.setItemStack(TesouroItemManager.getTesouroItemById(level, id).getItemStack());
-            } else {
+
+            if (id == null) {
                 tesouroItem.setItemStack(item);
+                tesouroItem.setChance(chance);
+                tesouroItem.setId(i + 1);
             }
-
-            tesouroItem.setId(i + 1);
 
             tesouroItem.save();
 

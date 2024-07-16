@@ -1,6 +1,8 @@
 package br.alkazuz.tesouros.config;
 
 import br.alkazuz.tesouros.config.manager.ConfigManager;
+import br.alkazuz.tesouros.util.Serializer;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.HashMap;
@@ -11,6 +13,7 @@ public class Settings {
     public static HashMap<Integer, String> TESOUROS_TITLE = new HashMap<>();
     public static HashMap<Integer, TreeMap<Integer, Float>> TESOUROS_PROBABILITY = new HashMap<>();
     public static HashMap<Integer, TreeMap<String, Integer>> TESOUROS_MOBS_LEVELS = new HashMap<>();
+    public static Location spawnLocation;
 
     public static void load() {
         try {
@@ -18,6 +21,10 @@ public class Settings {
                     .getConfig("settings");
             for (String key : config.getConfigurationSection("books-title").getKeys(false)) {
                 TESOUROS_TITLE.put(Integer.parseInt(key), config.getString("books-title." + key).replace("&", "§"));
+            }
+
+            if (config.contains("spawn-location")) {
+                spawnLocation = Serializer.getLocation(config.getString("spawn-location"));
             }
 
             for (String level : config.getConfigurationSection("books-probability").getKeys(false)) {

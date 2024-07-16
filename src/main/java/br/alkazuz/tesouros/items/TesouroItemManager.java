@@ -25,10 +25,17 @@ public class TesouroItemManager {
                 int id = Integer.parseInt(key);
                 float chance = (float) file.getDouble(i + "." + key + ".chance");
                 int level = file.getInt(i + "." + key + ".level");
-                tesouros.get(i).add(new TesouroItem(id,
+                String concurrence = null;
+                if (file.contains(i + "." + key + ".concurrence")) {
+                    concurrence = file.getString(i + "." + key + ".concurrence");
+                }
+                TesouroItem tesouroItem = new TesouroItem(id,
                         chance,
                         Serializer.deserializeItemStack(file.getString(i + "." + key + ".item")),
-                        level));
+                        level,
+                        concurrence);
+
+                tesouros.get(i).add(tesouroItem);
             }
         }
 

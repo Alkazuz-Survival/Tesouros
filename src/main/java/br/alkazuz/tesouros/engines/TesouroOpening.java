@@ -5,7 +5,9 @@ import br.alkazuz.correio.object.CorreioItemManager;
 import br.alkazuz.tesouros.Tesouros;
 import br.alkazuz.tesouros.config.Settings;
 import br.alkazuz.tesouros.entities.CustomEntities;
+import br.alkazuz.tesouros.items.TesouroItem;
 import br.alkazuz.tesouros.itens.TesouroItems;
+import br.alkazuz.tesouros.util.TesouroItemGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -35,7 +37,7 @@ public class TesouroOpening implements Listener {
     private int currentLevel;
     private final int maxLevel;
     private long interactLong;
-    private long mobSpawnLong;
+    private Integer taskTimeout;
 
     public TesouroOpening(Player player, ArenaTesouro arenaTesouro, int maxLevel) {
         this.player = player;
@@ -67,6 +69,14 @@ public class TesouroOpening implements Listener {
 
     public void nextLevel() {
         currentLevel++;
+        player.sendMessage("§aVocê tem §l10 minutos §apara derrubar todos os monstros.");
+
+        if (taskTimeout != null) Bukkit.getScheduler().cancelTask(taskTimeout);
+
+        this.taskTimeout = Bukkit.getScheduler().scheduleSyncDelayedTask(Tesouros.getInstance(), () -> {
+            player.sendMessage("§cVocê não conseguiu derrubar todos os monstros a tempo.");
+            finish();
+        }, 20 * 60 * 10);
     }
 
     public boolean hasNextLevel() {
@@ -79,6 +89,21 @@ public class TesouroOpening implements Listener {
         for (Entity entity : getEntities()) {
             entity.remove();
         }
+        if (player.isOnline() && Settings.spawnLocation != null)
+            player.teleport(Settings.spawnLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
+    }
+
+    public void handleWin() {
+        if (taskTimeout != null) Bukkit.getScheduler().cancelTask(taskTimeout);
+        List<TesouroItem> tesouroItems = TesouroItemGenerator.generateTesouroItems(maxLevel);
+        for (TesouroItem tesouroItem : tesouroItems) {
+            CorreioItem correioItem = new CorreioItem(tesouroItem.getItemStack(), "CoreMC", player.getName());
+            CorreioItemManager.addCorreioItem(player.getName(), correioItem);
+            correioItem.save();
+        }
+
+        player.sendMessage("§aVocê venceu o tesouro e recebeu os itens no correio.");
+        finish();
     }
 
     public void spawnMobs() {
@@ -86,7 +111,6 @@ public class TesouroOpening implements Listener {
         if (mobsCountMap == null) {
             return;
         }
-        mobSpawnLong = System.currentTimeMillis();
         for (Map.Entry<String, Integer> entry : mobsCountMap.entrySet()) {
             String mobName = entry.getKey();
             int mobCount = entry.getValue();
@@ -164,6 +188,7 @@ public class TesouroOpening implements Listener {
         if (event.getPlayer() != player) return;
         CorreioItem correioItem = new CorreioItem(TesouroItems.getTesouro(maxLevel), "CoreMC", player.getName());
         CorreioItemManager.addCorreioItem(player.getName(), correioItem);
+        correioItem.save();
         finish();
     }
 
@@ -195,8 +220,9 @@ public class TesouroOpening implements Listener {
                 player.sendMessage("");
                 player.sendMessage("§3[Tesouros] §eOs monstros vieram defender o tesouro nível §a" + currentLevel + "§e. Cuidado!");
                 player.sendMessage("");
-                player.sendMessage("§aVocê tem §l10 minutos §apara derrubar todos os monstros.");
+
             } else {
+                handleWin();
                 player.sendMessage("§aVocê abriu todos os níveis do tesouro.");
             }
         }
