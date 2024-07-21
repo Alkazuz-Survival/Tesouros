@@ -1,6 +1,5 @@
 package br.alkazuz.tesouros.items;
 
-import br.alkazuz.tesouros.commands.TesourosCommand;
 import br.alkazuz.tesouros.config.manager.ConfigManager;
 import br.alkazuz.tesouros.util.Serializer;
 import org.bukkit.configuration.file.FileConfiguration;

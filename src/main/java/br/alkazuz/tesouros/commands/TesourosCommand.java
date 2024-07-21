@@ -1,119 +1,81 @@
 package br.alkazuz.tesouros.commands;
 
-import br.alkazuz.tesouros.config.ArenasSettings;
 import br.alkazuz.tesouros.config.Settings;
-import br.alkazuz.tesouros.config.manager.ConfigManager;
-import br.alkazuz.tesouros.engines.ArenaTesouro;
-import br.alkazuz.tesouros.engines.ArenasTesouroManager;
-import br.alkazuz.tesouros.gui.GuiEditTesouroItems;
-import br.alkazuz.tesouros.items.TesouroItem;
-import br.alkazuz.tesouros.itens.TesouroItems;
-import br.alkazuz.tesouros.util.Serializer;
-import br.alkazuz.tesouros.util.TesouroItemGenerator;
+import br.alkazuz.tesouros.gui.GuiShowTesouroItems;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import java.util.List;
+import java.util.Map;
 
 public class TesourosCommand implements CommandExecutor {
 
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-        if (!(commandSender.hasPermission("tesouros.admin"))) {
-            return true;
-        }
-
         if (!(commandSender instanceof Player)) {
             return true;
         }
 
         if (strings.length == 0) {
+            commandSender.sendMessage("§a\n§a§lTesouros disponíveis:\n");
+            for (int i = 1; i <= 12; i++) {
+                int minLevel = 0;
+                Map<Integer, Float> probability = Settings.TESOUROS_PROBABILITY.get(i);
+                for (Map.Entry<Integer, Float> entry : probability.entrySet()) {
+                    if (entry.getValue() > 0) {
+                        minLevel = entry.getKey();
+                        break;
+                    }
+                }
+                if (minLevel == 0) {
+                    continue;
+                }
+                String title = String.format(" %sTesouro nível %d §8- §7Necessário nível §a%d §7em alguma skill", getColorLevel(i), i, minLevel);
+                if (i == 12) {
+                    title = String.format(" %sTesouro nível %d §8- §7Necessário nível §a%d §7em todas as skills", getColorLevel(i), i, minLevel);
+                }
+                commandSender.sendMessage(title);
+
+            }
+            commandSender.sendMessage("§7 Use §f/tesouros itens <level> §7para abrir o menu de itens do tesouro\n§c");
             return true;
-        }
-
-        Player player = (Player) commandSender;
-
-        if (strings[0].equalsIgnoreCase("addarena")) {
-            ArenaTesouro arenaTesouro = new ArenaTesouro(player.getLocation());
-            ArenasTesouroManager.getInstance().addArena(arenaTesouro);
-            ArenasSettings.save(arenaTesouro);
-            player.sendMessage("§aArena adicionada com sucesso!");
-            return true;
-        }
-
-        if (strings[0].equalsIgnoreCase("itens")) {
+        } else if (strings[0].equalsIgnoreCase("itens")) {
             if (strings.length == 1) {
-                player.sendMessage("§cUtilize /tesouros itens <level>");
+                commandSender.sendMessage("§cUtilize /tesouros itens <level>");
                 return true;
             }
-
             int level = 0;
 
             try {
                 level = Integer.parseInt(strings[1]);
             } catch (NumberFormatException e) {
-                player.sendMessage("§cO level deve ser um número!");
+                commandSender.sendMessage("§cO level deve ser um número!");
                 return true;
             }
 
             if (level < 1 || level > 12) {
-                player.sendMessage("§cO level deve ser entre 1 e 12!");
+                commandSender.sendMessage("§cO level deve ser entre 1 e 12!");
                 return true;
             }
 
-            GuiEditTesouroItems.open(player, level);
-
-            return true;
+            GuiShowTesouroItems.open((Player) commandSender, level);
+        } else {
+            commandSender.sendMessage("§c\n§a§l Comandos disponíveis:\n\n" +
+                    "§7/tesouros itens <level> §8- §fAbre o menu de edição de itens do tesouro\n" +
+                    "§7/tesouros §8- §fMostra todos os níveis de tesouros disponíveis\n§c");
         }
 
-        if (strings[0].equalsIgnoreCase("setspawn")) {
-            Settings.spawnLocation = player.getLocation();
-            FileConfiguration config = ConfigManager
-                    .getConfig("settings");
-            config.set("spawn-location", Serializer.getStringLocation(player.getLocation()));
-            ConfigManager.saveConfig(config, "settings");
-            player.sendMessage("§aSpawn setado com sucesso!");
-            return true;
-        }
-
-        if (strings[0].equalsIgnoreCase("testitens")) {
-            int level = Integer.parseInt(strings[1]);
-            List<TesouroItem> tesouroItems = TesouroItemGenerator.generateTesouroItems(level);
-            for  (TesouroItem tesouroItem : tesouroItems) {
-                player.getInventory().addItem(tesouroItem.getItemStack());
-            }
-            return true;
-        }
-
-        if (strings[0].equalsIgnoreCase("addlivro")) {
-            if (strings.length == 1) {
-                player.sendMessage("§cUtilize /tesouros addlivro <level>");
-                return true;
-            }
-
-            int level = 0;
-
-            try {
-                level = Integer.parseInt(strings[1]);
-            } catch (NumberFormatException e) {
-                player.sendMessage("§cO level deve ser um número!");
-                return true;
-            }
-
-            if (level < 1 || level > 12) {
-                player.sendMessage("§cO level deve ser entre 1 e 12!");
-                return true;
-            }
-
-            player.getInventory().addItem(TesouroItems.getTesouro(level));
-            player.sendMessage("§aLivro adicionado com sucesso!");
-            return true;
-        }
 
         return false;
+    }
+
+    private String getColorLevel(int level) {
+        String title = Settings.TESOUROS_TITLE.get(level);
+        if (title.contains("§")) {
+            return title.substring(title.indexOf("§"), title.indexOf("§") + 2);
+        }
+        return "§f";
     }
 }

@@ -6,7 +6,11 @@ softdepend:
   - mcMMO
   - Vault
 commands:
+  tesourosadmin:
+    description: Comando principal do plugin
+    permission: tesouros.admin
   tesouros:
     description: Comando principal do plugin
-    usage: /tesouros
-    permission: tesouros.admin
+    aliases:
+      - tesouro
+    permission: tesouros.use
