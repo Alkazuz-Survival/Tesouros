@@ -1,26 +1,16 @@
 package br.alkazuz.tesouros.gui;
 
-import br.alkazuz.tesouros.Tesouros;
-import br.alkazuz.tesouros.config.manager.ConfigManager;
 import br.alkazuz.tesouros.items.TesouroItem;
 import br.alkazuz.tesouros.items.TesouroItemManager;
 import br.alkazuz.tesouros.util.GuiHolder;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class GuiShowTesouroItems implements Listener {
 
@@ -57,6 +47,11 @@ public class GuiShowTesouroItems implements Listener {
         GuiHolder holder = (GuiHolder) event.getInventory().getHolder();
 
         if (holder.getId() != 99) {
+            return;
+        }
+
+        Player player = (Player) event.getWhoClicked();
+        if (player.hasPermission("tesouros.admin")) {
             return;
         }
 

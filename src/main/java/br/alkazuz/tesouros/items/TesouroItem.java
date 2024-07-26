@@ -1,11 +1,13 @@
 package br.alkazuz.tesouros.items;
 
 import br.alkazuz.tesouros.config.manager.ConfigManager;
-import br.alkazuz.tesouros.config.manager.DataManager;
 import br.alkazuz.tesouros.util.ItemBuilder;
 import br.alkazuz.tesouros.util.Serializer;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Map;
 
 public class TesouroItem {
     public Integer id;
@@ -39,7 +41,7 @@ public class TesouroItem {
 
     public Integer getId() {
         if (this.id == null) {
-           this.id = TesouroItemManager.getNextId(this.level);
+            this.id = TesouroItemManager.getNextId(this.level);
         }
         return this.id;
     }
@@ -86,7 +88,14 @@ public class TesouroItem {
             config.set(path + "chance", this.chance);
             config.set(path + "item", Serializer.serializeItemStack(this.itemStack));
             config.set(path + "level", this.level);
-            if (!this.concurrence.isEmpty()) {
+            config.set(path + "material", this.itemStack.getType().name());
+            config.set(path + "data", this.itemStack.getData().getData());
+            if (itemStack.getEnchantments() != null && !itemStack.getEnchantments().isEmpty()) {
+                for (Map.Entry<Enchantment, Integer> entry : itemStack.getEnchantments().entrySet()) {
+                    config.set(path + "enchantments." + entry.getKey().getName(), entry.getValue());
+                }
+            }
+            if (concurrence != null && !this.concurrence.isEmpty()) {
                 config.set(path + "concurrence", this.concurrence);
             }
             this.id = nId;

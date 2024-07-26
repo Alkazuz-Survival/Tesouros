@@ -1,13 +1,14 @@
 package br.alkazuz.tesouros.util;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-
 import br.alkazuz.correio.utils.objectStream.BukkitObjectInputStream;
 import br.alkazuz.correio.utils.objectStream.BukkitObjectOutputStream;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+
 public class Serializer {
 
     public static ItemStack deserializeItemStack(String data) {
@@ -53,7 +54,10 @@ public class Serializer {
             dataOutput.writeObject(item);
 
             dataOutput.close();
-            return Base64Coder.encodeLines(outputStream.toByteArray());
+
+            byte[] in = outputStream.toByteArray();
+
+            return Base64Coder.encodeLines(in, 0, in.length, 76, ""); // Base64Coder.encodeLines(outputStream.toByteArray());
         } catch (Throwable e) {
             e.printStackTrace();
         }

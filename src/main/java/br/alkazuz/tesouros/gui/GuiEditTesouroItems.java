@@ -2,15 +2,9 @@ package br.alkazuz.tesouros.gui;
 
 import br.alkazuz.tesouros.Tesouros;
 import br.alkazuz.tesouros.config.manager.ConfigManager;
-import br.alkazuz.tesouros.engines.ArenaTesouro;
-import br.alkazuz.tesouros.engines.ArenasTesouroManager;
-import br.alkazuz.tesouros.engines.TesouroOpening;
-import br.alkazuz.tesouros.engines.TesouroOpeningManager;
 import br.alkazuz.tesouros.items.TesouroItem;
 import br.alkazuz.tesouros.items.TesouroItemManager;
 import br.alkazuz.tesouros.util.GuiHolder;
-import br.alkazuz.tesouros.util.ItemBuilder;
-import net.milkbowl.vault.chat.Chat;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -30,7 +24,7 @@ import java.util.List;
 
 public class GuiEditTesouroItems implements Listener {
 
-    public static void open(Player player, int level) {
+    public static void open(Player player, int level, int targetLevel) {
         HashMap<String, Object> properties = new HashMap<>();
         properties.put("level", level);
         Inventory inventory = player.getServer().createInventory(
@@ -38,11 +32,16 @@ public class GuiEditTesouroItems implements Listener {
 
         int slot = 0;
 
-        for (TesouroItem tesouroItem : TesouroItemManager.getTesouroItems(level)) {
+        for (TesouroItem tesouroItem : TesouroItemManager.getTesouroItems(targetLevel)) {
             if (slot >= 54) {
                 break;
             }
-            ItemStack item = tesouroItem.getDisplayItem().clone();
+            ItemStack item;
+            if (level != targetLevel) {
+                item = tesouroItem.getItemStack().clone();
+            } else {
+                item = tesouroItem.getDisplayItem().clone();
+            }
             inventory.setItem(slot, item);
             slot++;
         }
@@ -103,7 +102,7 @@ public class GuiEditTesouroItems implements Listener {
                     tesouroItem.save();
                     event.setCancelled(true);
                     player.sendMessage("§aChance do item alterada com sucesso.");
-                    open(player, level);
+                    open(player, level, level);
 
 
                 },
@@ -175,7 +174,7 @@ public class GuiEditTesouroItems implements Listener {
                 }
             }
 
-            if (id != null)
+            if (id != null && TesouroItemManager.getTesouroItemById(level, id) != null)
                 tesouroItem = TesouroItemManager.getTesouroItemById(level, id);
 
 

@@ -5,6 +5,7 @@ import br.alkazuz.correio.object.CorreioItemManager;
 import br.alkazuz.tesouros.Tesouros;
 import br.alkazuz.tesouros.config.Settings;
 import br.alkazuz.tesouros.entities.CustomEntities;
+import br.alkazuz.tesouros.event.TesouroFinishEvent;
 import br.alkazuz.tesouros.items.TesouroItem;
 import br.alkazuz.tesouros.itens.TesouroItems;
 import br.alkazuz.tesouros.util.TesouroItemGenerator;
@@ -20,7 +21,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -104,6 +104,9 @@ public class TesouroOpening implements Listener {
 
         player.sendMessage("§aVocê venceu o tesouro e recebeu os itens no correio.");
         finish();
+
+        TesouroFinishEvent tesouroFinishEvent = new TesouroFinishEvent(player, this);
+        Bukkit.getPluginManager().callEvent(tesouroFinishEvent);
     }
 
     public void spawnMobs() {

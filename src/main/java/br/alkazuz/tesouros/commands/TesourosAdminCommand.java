@@ -7,6 +7,7 @@ import br.alkazuz.tesouros.engines.ArenaTesouro;
 import br.alkazuz.tesouros.engines.ArenasTesouroManager;
 import br.alkazuz.tesouros.gui.GuiEditTesouroItems;
 import br.alkazuz.tesouros.items.TesouroItem;
+import br.alkazuz.tesouros.items.TesouroItemManager;
 import br.alkazuz.tesouros.itens.TesouroItems;
 import br.alkazuz.tesouros.util.Serializer;
 import br.alkazuz.tesouros.util.TesouroItemGenerator;
@@ -45,6 +46,38 @@ public class TesourosAdminCommand implements CommandExecutor {
             return true;
         }
 
+        if (strings[0].equalsIgnoreCase("copyitens")) {
+            if (strings.length != 3) {
+                player.sendMessage("§cUtilize /tesouros copyitens <level> <target>");
+                return true;
+            }
+
+            int level = 0;
+            int target = 0;
+
+            try {
+                level = Integer.parseInt(strings[1]);
+                target = Integer.parseInt(strings[2]);
+            } catch (NumberFormatException e) {
+                player.sendMessage("§cO level e o target devem ser números!");
+                return true;
+            }
+
+            if (level < 1 || level > 12) {
+                player.sendMessage("§cO level deve ser entre 1 e 12!");
+                return true;
+            }
+
+            if (target < 1 || target > 12) {
+                player.sendMessage("§cO target deve ser entre 1 e 12!");
+                return true;
+            }
+
+            TesouroItemManager.getTesouroItems(level).clear();
+            GuiEditTesouroItems.open(player, level, target);
+            return true;
+        }
+
         if (strings[0].equalsIgnoreCase("itens")) {
             if (strings.length == 1) {
                 player.sendMessage("§cUtilize /tesouros itens <level>");
@@ -65,7 +98,7 @@ public class TesourosAdminCommand implements CommandExecutor {
                 return true;
             }
 
-            GuiEditTesouroItems.open(player, level);
+            GuiEditTesouroItems.open(player, level, level);
 
             return true;
         }
@@ -83,7 +116,7 @@ public class TesourosAdminCommand implements CommandExecutor {
         if (strings[0].equalsIgnoreCase("testitens")) {
             int level = Integer.parseInt(strings[1]);
             List<TesouroItem> tesouroItems = TesouroItemGenerator.generateTesouroItems(level);
-            for  (TesouroItem tesouroItem : tesouroItems) {
+            for (TesouroItem tesouroItem : tesouroItems) {
                 player.getInventory().addItem(tesouroItem.getItemStack());
             }
             return true;
@@ -117,6 +150,7 @@ public class TesourosAdminCommand implements CommandExecutor {
         player.sendMessage("§cComandos disponíveis:");
         player.sendMessage("§7/tesouros addarena");
         player.sendMessage("§7/tesouros itens <level>");
+        player.sendMessage("§7/tesouros copyitens <level> <target>");
         player.sendMessage("§7/tesouros setspawn");
         player.sendMessage("§7/tesouros testitens <level>");
         player.sendMessage("§7/tesouros addlivro <level>");
