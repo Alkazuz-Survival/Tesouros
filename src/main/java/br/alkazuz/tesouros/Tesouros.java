@@ -8,6 +8,7 @@ import br.alkazuz.tesouros.config.manager.ConfigManager;
 import br.alkazuz.tesouros.gui.GuiEditTesouroItems;
 import br.alkazuz.tesouros.gui.GuiShowTesouroItems;
 import br.alkazuz.tesouros.gui.MenuConfirmOpen;
+import br.alkazuz.tesouros.hooks.SunshineHook;
 import br.alkazuz.tesouros.items.TesouroItemManager;
 import br.alkazuz.tesouros.itens.TesouroItems;
 import br.alkazuz.tesouros.listener.PlayerInteractListener;
@@ -22,6 +23,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class Tesouros extends JavaPlugin {
     private static Tesouros instance;
     public static EventWaiter eventWaiter;
+
     @Override
     public void onEnable() {
         instance = this;
@@ -32,6 +34,7 @@ public final class Tesouros extends JavaPlugin {
         TesouroItems.init();
         loadListeners();
         TesouroItemManager.load();
+        SunshineHook.init();
         eventWaiter = new EventWaiter(this);
         eventWaiter.addEvents(AsyncPlayerChatEvent.class, InventoryClickEvent.class);
 

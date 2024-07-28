@@ -53,7 +53,7 @@ public class MenuConfirmOpen implements Listener {
             int level = (int) holder.getProperty("level");
             ItemStack item = (ItemStack) holder.getProperty("item");
             ItemStack itemInHand = event.getWhoClicked().getItemInHand();
-            if (itemInHand == null || !itemInHand.isSimilar(item)) {
+            if (itemInHand == null || !itemInHand.equals(item)) {
                 player.sendMessage("§cVocê não está segurando o item correto.");
                 player.closeInventory();
                 return;
@@ -66,7 +66,7 @@ public class MenuConfirmOpen implements Listener {
                 player.closeInventory();
                 return;
             }
-            removeItem(itemInHand, player);
+            decreamentItemStackOrRemove(player);
             TesouroOpening tesouroOpening = new TesouroOpening(player, arenaTesouro, level);
             TesouroOpeningManager.getInstance().addTesouro(tesouroOpening);
             tesouroOpening.start();
@@ -76,12 +76,13 @@ public class MenuConfirmOpen implements Listener {
         }
     }
 
-    private void removeItem(ItemStack item, Player player) {
-        if (item.getAmount() == 1) {
-            item.setType(Material.AIR);
-            item.setAmount(0);
+    private void decreamentItemStackOrRemove(Player player) {
+        ItemStack itemInHand = player.getItemInHand();
+        if (itemInHand.getAmount() > 1) {
+            itemInHand.setAmount(itemInHand.getAmount() - 1);
         } else {
-            item.setAmount(item.getAmount() - 1);
+            itemInHand.setTypeId(0);
+            player.setItemInHand(null);
         }
         player.updateInventory();
     }

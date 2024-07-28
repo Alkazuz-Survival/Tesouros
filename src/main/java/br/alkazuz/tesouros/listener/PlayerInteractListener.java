@@ -1,15 +1,15 @@
 package br.alkazuz.tesouros.listener;
 
+import br.alkazuz.sunshine.anticheat.data.AntiCheatDataManager;
 import br.alkazuz.tesouros.Tesouros;
-import br.alkazuz.tesouros.config.Settings;
 import br.alkazuz.tesouros.gui.MenuConfirmOpen;
+import br.alkazuz.tesouros.hooks.SunshineHook;
 import br.alkazuz.tesouros.itens.TesouroItems;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntitySpawnEvent;
@@ -35,7 +35,7 @@ public class PlayerInteractListener implements Listener {
         }, 20L * 8L);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
@@ -59,9 +59,16 @@ public class PlayerInteractListener implements Listener {
             return;
         }
 
+
         for (int i = 1; i <= 12; i++) {
             if (item.isSimilar(TesouroItems.getTesouro(i))) {
                 event.setCancelled(true);
+                if (SunshineHook.enabled) {
+                    if (!AntiCheatDataManager.isValidAntiCheatData(event.getPlayer().getName())) {
+                        event.getPlayer().sendMessage("§cVocê só pode abrir tesouros com o antihack instalado");
+                        return;
+                    }
+                }
                 MenuConfirmOpen.open(event.getPlayer(), i, item);
                 return;
             }

@@ -40,7 +40,8 @@ public class RandomTesourFish {
     }
 
     private static boolean isChance(float chance) {
-        return Math.random() * 100.0 < chance;
+        double random = Math.random() * 100.0;
+        return random <= chance;
     }
 
 }

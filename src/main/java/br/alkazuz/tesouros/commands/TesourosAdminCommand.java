@@ -159,6 +159,7 @@ public class TesourosAdminCommand implements CommandExecutor {
         player.sendMessage("§7/tesouros itens <level>");
         player.sendMessage("§7/tesouros copyitens <level> <target>");
         player.sendMessage("§7/tesouros setspawn");
+        player.sendMessage("§7/tesouros reload");
         player.sendMessage("§7/tesouros testitens <level>");
         player.sendMessage("§7/tesouros addlivro <level>");
 

@@ -21,6 +21,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -231,6 +232,20 @@ public class TesouroOpening implements Listener {
         }
     }
 
+    @EventHandler
+    public void onDamage(EntityDamageEvent event) {
+        Entity entity = event.getEntity();
+        if (entity instanceof LivingEntity) {
+            LivingEntity livingEntity = (LivingEntity) entity;
+            if (!livingEntity.hasMetadata("tesouroid")) {
+                return;
+            }
+            if (event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
     @EventHandler(priority = EventPriority.HIGH)
     public void onSpawn(EntitySpawnEvent event) {
         Entity entity = event.getEntity();
@@ -240,7 +255,7 @@ public class TesouroOpening implements Listener {
                 if (!livingEntity.hasMetadata("tesouroid")) {
                     return;
                 }
-                livingEntity.setMaxHealth(livingEntity.getMaxHealth() * 2);
+                livingEntity.setMaxHealth((int) (livingEntity.getMaxHealth() * (currentLevel * 0.4D)));
                 livingEntity.setHealth(livingEntity.getMaxHealth());
                 livingEntity.addPotionEffect(
                         new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 1));

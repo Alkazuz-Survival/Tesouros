@@ -40,9 +40,9 @@ public class mcMMOListener implements Listener {
 
             event.getPlayer().sendMessage("§aVocê encontrou um tesouro! Verifique seu correio.");
 
-            tesouroDelay.put(event.getPlayer().getName(), System.currentTimeMillis() + 60000 * 3);
+            tesouroDelay.put(event.getPlayer().getName(), System.currentTimeMillis() + 60000 * 10);
         } else {
-            tesouroDelay.put(event.getPlayer().getName(), System.currentTimeMillis() + 10000);
+            tesouroDelay.put(event.getPlayer().getName(), System.currentTimeMillis() + 60000);
         }
 
     }
