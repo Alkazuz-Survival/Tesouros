@@ -46,6 +46,13 @@ public class TesourosAdminCommand implements CommandExecutor {
             return true;
         }
 
+        if (strings[0].equalsIgnoreCase("reload")) {
+            Settings.load();
+            TesouroItemManager.load();
+            player.sendMessage("§aConfigurações recarregadas com sucesso!");
+            return true;
+        }
+
         if (strings[0].equalsIgnoreCase("copyitens")) {
             if (strings.length != 3) {
                 player.sendMessage("§cUtilize /tesouros copyitens <level> <target>");

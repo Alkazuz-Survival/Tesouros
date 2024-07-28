@@ -157,7 +157,8 @@ public class GuiEditTesouroItems implements Listener {
             TesouroItem tesouroItem = new TesouroItem(null, 0, item, level);
 
             float chance = 0.0f;
-            Integer id = null;
+
+            int id = i;
 
             if (item.hasItemMeta()) {
                 if (item.getItemMeta().hasLore()) {
@@ -166,22 +167,17 @@ public class GuiEditTesouroItems implements Listener {
                             String[] split = lore.split(" ");
                             chance = Float.parseFloat(ChatColor.stripColor(split[1].replace("%", "")));
                         }
-
-                        if (lore.startsWith("§8")) {
-                            id = Integer.parseInt(lore.replace("§8", ""));
-                        }
                     }
                 }
             }
 
-            if (id != null && TesouroItemManager.getTesouroItemById(level, id) != null)
+            if (TesouroItemManager.getTesouroItemById(level, id) != null) {
                 tesouroItem = TesouroItemManager.getTesouroItemById(level, id);
 
-
-            if (id == null) {
+            } else {
                 tesouroItem.setItemStack(item);
                 tesouroItem.setChance(chance);
-                tesouroItem.setId(i + 1);
+                tesouroItem.setId(id);
             }
 
             tesouroItem.save();

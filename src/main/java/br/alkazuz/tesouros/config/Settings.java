@@ -19,6 +19,9 @@ public class Settings {
         try {
             FileConfiguration config = ConfigManager
                     .getConfig("settings");
+            TESOUROS_PROBABILITY.clear();
+            TESOUROS_TITLE.clear();
+            TESOUROS_MOBS_LEVELS.clear();
             for (String key : config.getConfigurationSection("books-title").getKeys(false)) {
                 TESOUROS_TITLE.put(Integer.parseInt(key), config.getString("books-title." + key).replace("&", "§"));
             }

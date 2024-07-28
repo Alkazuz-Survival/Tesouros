@@ -5,7 +5,10 @@ import br.alkazuz.tesouros.util.Serializer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 public class TesouroItemManager {
 
@@ -14,7 +17,7 @@ public class TesouroItemManager {
     public static void load() {
         ConfigManager.createConfig("itens");
         FileConfiguration file = ConfigManager.getConfig("itens");
-
+        tesouros.clear();
         for (int i = 1; i <= 12; i++) {
             tesouros.put(i, new ArrayList<>());
             if (!file.contains(String.valueOf(i))) {
