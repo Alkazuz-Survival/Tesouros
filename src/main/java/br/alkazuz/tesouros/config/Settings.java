@@ -28,6 +28,9 @@ public class Settings {
 
             if (config.get("spawn-location") != null || config.contains("spawn-location")) {
                 spawnLocation = Serializer.getLocation(config.getString("spawn-location"));
+                System.out.println("Spawn location loaded: " + spawnLocation);
+            } else {
+                System.out.println("Spawn location not found");
             }
 
             for (String level : config.getConfigurationSection("books-probability").getKeys(false)) {

@@ -7,9 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.HashMap;
-import java.util.TreeMap;
-
 public class ArenasSettings {
 
 
@@ -17,6 +14,9 @@ public class ArenasSettings {
         try {
             FileConfiguration config = ConfigManager
                     .getConfig("arenas");
+            if (!config.contains("arenas")) {
+                return;
+            }
             for (String key : config.getConfigurationSection("arenas").getKeys(false)) {
                 String path = "arenas." + key + ".";
                 String world = config.getString(path + "world");

@@ -48,6 +48,7 @@ public class TesourosAdminCommand implements CommandExecutor {
 
         if (strings[0].equalsIgnoreCase("reload")) {
             Settings.load();
+            ArenasSettings.load();
             TesouroItemManager.load();
             player.sendMessage("§aConfigurações recarregadas com sucesso!");
             return true;

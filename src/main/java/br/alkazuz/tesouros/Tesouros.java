@@ -30,7 +30,7 @@ public final class Tesouros extends JavaPlugin {
         ConfigManager.createConfig("settings");
         getCommand("tesourosadmin").setExecutor(new TesourosAdminCommand());
         getCommand("tesouros").setExecutor(new TesourosCommand());
-        Settings.load();
+
         TesouroItems.init();
         loadListeners();
         TesouroItemManager.load();
@@ -39,6 +39,7 @@ public final class Tesouros extends JavaPlugin {
         eventWaiter.addEvents(AsyncPlayerChatEvent.class, InventoryClickEvent.class);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, ArenasSettings::load);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this, Settings::load);
     }
 
     @Override
