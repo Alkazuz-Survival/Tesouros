@@ -26,7 +26,7 @@ public class Settings {
                 TESOUROS_TITLE.put(Integer.parseInt(key), config.getString("books-title." + key).replace("&", "§"));
             }
 
-            if (config.contains("spawn-location")) {
+            if (config.get("spawn-location") != null || config.contains("spawn-location")) {
                 spawnLocation = Serializer.getLocation(config.getString("spawn-location"));
             }
 

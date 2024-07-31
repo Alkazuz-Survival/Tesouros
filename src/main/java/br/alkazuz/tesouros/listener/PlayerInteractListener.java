@@ -2,6 +2,7 @@ package br.alkazuz.tesouros.listener;
 
 import br.alkazuz.sunshine.anticheat.data.AntiCheatDataManager;
 import br.alkazuz.tesouros.Tesouros;
+import br.alkazuz.tesouros.config.Settings;
 import br.alkazuz.tesouros.gui.MenuConfirmOpen;
 import br.alkazuz.tesouros.hooks.SunshineHook;
 import br.alkazuz.tesouros.itens.TesouroItems;
@@ -12,11 +13,50 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class PlayerInteractListener implements Listener {
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        if (!event.getPlayer().getWorld().getName().equals("tesouros")) {
+            return;
+        }
+        if (Settings.spawnLocation == null) return;
+        event.getPlayer().teleport(Settings.spawnLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
+    }
+
+    @EventHandler
+    public void onPlace(BlockPlaceEvent event) {
+        if (!event.getPlayer().getWorld().getName().equals("tesouros")) {
+            return;
+        }
+
+        if (event.getPlayer().getGameMode() == org.bukkit.GameMode.CREATIVE) {
+            return;
+        }
+
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onBreak(BlockBreakEvent event) {
+        if (!event.getPlayer().getWorld().getName().equals("tesouros")) {
+            return;
+        }
+
+        if (event.getPlayer().getGameMode() == org.bukkit.GameMode.CREATIVE) {
+            return;
+        }
+
+        event.setCancelled(true);
+    }
 
     @EventHandler
     public void onEntityItensSpawn(EntitySpawnEvent event) {

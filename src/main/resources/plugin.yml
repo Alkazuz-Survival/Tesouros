@@ -5,6 +5,7 @@ load: STARTUP
 softdepend:
   - mcMMO
   - Vault
+  - SunshineAntiHack
 commands:
   tesourosadmin:
     description: Comando principal do plugin

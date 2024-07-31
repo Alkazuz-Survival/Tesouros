@@ -255,7 +255,11 @@ public class TesouroOpening implements Listener {
                 if (!livingEntity.hasMetadata("tesouroid")) {
                     return;
                 }
-                livingEntity.setMaxHealth((int) (livingEntity.getMaxHealth() * (currentLevel * 0.4D)));
+                double amplifer = currentLevel * 0.4;
+                if (amplifer < 2.5) {
+                    amplifer = 2.5;
+                }
+                livingEntity.setMaxHealth((int) (livingEntity.getMaxHealth() * amplifer));
                 livingEntity.setHealth(livingEntity.getMaxHealth());
                 livingEntity.addPotionEffect(
                         new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 1));
