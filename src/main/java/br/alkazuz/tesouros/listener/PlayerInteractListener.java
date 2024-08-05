@@ -99,6 +99,9 @@ public class PlayerInteractListener implements Listener {
             return;
         }
 
+        if (event.getPlayer().getWorld().getName().equals("tesouros")) {
+            return;
+        }
 
         for (int i = 1; i <= 12; i++) {
             if (item.isSimilar(TesouroItems.getTesouro(i))) {

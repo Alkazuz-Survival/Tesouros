@@ -82,6 +82,12 @@ public class TesouroItem {
 
     public void save() {
         try {
+            if (this.itemStack.hasItemMeta() && this.itemStack.getItemMeta().hasLore()) {
+                if (this.itemStack.getItemMeta().getLore().stream()
+                        .anyMatch(s -> s.contains("§7Chance: §f") && s.contains("%"))) {
+                    this.itemStack = new ItemBuilder(this.itemStack).clearLore().build();
+                }
+            }
             FileConfiguration config = ConfigManager.getConfig("itens");
             Integer nId = this.getId();
             String path = String.valueOf(this.level) + "." + nId + ".";

@@ -23,11 +23,18 @@ public class RandomTesourFish {
     }
 
     public static Integer getRandomTesouro(Player player, SkillType skillType, int skillLevel) {
+        boolean vipWorld = player.getWorld().getName().equals("vip");
+
         for (Map.Entry<Integer, TreeMap<Integer, Float>> entry : Settings.TESOUROS_PROBABILITY.entrySet()) {
             int level = entry.getKey();
             TreeMap<Integer, Float> probabilityMap = entry.getValue();
             Float probability = probabilityMap.floorEntry(skillLevel).getValue();
-            if (probability != null && isChance(probability)) {
+
+            if (probability <= 0 && vipWorld && level != 12) {
+                probability = 0.1f;
+            }
+
+            if (isChance(probability)) {
                 if (level == 12) {
                     if (!hasAllSkillsInLevel(player, 500)) {
                         continue;

@@ -233,9 +233,10 @@ public class ItemBuilder {
         return this;
     }
 
-    public void clearLore() {
+    public ItemBuilder clearLore() {
         final ItemMeta meta = this.is.getItemMeta();
         meta.setLore(new ArrayList<String>());
         this.is.setItemMeta(meta);
+        return this;
     }
 }

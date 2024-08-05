@@ -31,15 +31,17 @@ public final class Tesouros extends JavaPlugin {
         getCommand("tesourosadmin").setExecutor(new TesourosAdminCommand());
         getCommand("tesouros").setExecutor(new TesourosCommand());
 
-        TesouroItems.init();
         loadListeners();
-        TesouroItemManager.load();
         SunshineHook.init();
         eventWaiter = new EventWaiter(this);
         eventWaiter.addEvents(AsyncPlayerChatEvent.class, InventoryClickEvent.class);
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this, ArenasSettings::load);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this, Settings::load);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+            Settings.load();
+            ArenasSettings.load();
+            TesouroItems.init();
+            TesouroItemManager.load();
+        });
     }
 
     @Override

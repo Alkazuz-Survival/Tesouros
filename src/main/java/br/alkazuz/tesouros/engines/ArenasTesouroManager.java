@@ -27,7 +27,6 @@ public class ArenasTesouroManager {
     }
 
     public ArenaTesouro getFreeArena() {
-        System.out.println(arenas.size());
         List<ArenaTesouro> remainingArenas = new ArrayList<>(arenas);
         for (TesouroOpening tesouro : TesouroOpeningManager.getInstance().getTesouros()) {
             if (tesouro.getArenaTesouro() == null) {
