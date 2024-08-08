@@ -1,6 +1,7 @@
 package br.alkazuz.tesouros.engines;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +29,16 @@ public class ArenasTesouroManager {
 
     public ArenaTesouro getFreeArena() {
         List<ArenaTesouro> remainingArenas = new ArrayList<>(arenas);
-        for (TesouroOpening tesouro : TesouroOpeningManager.getInstance().getTesouros()) {
-            if (tesouro.getArenaTesouro() == null) {
-                continue;
-            }
-            for (ArenaTesouro arena : arenas) {
-                if (arena == tesouro.getArenaTesouro()) {
-                    continue;
+        for (ArenaTesouro arena : arenas) {
+            boolean hasPlayerNear = false;
+            List<Player> players = arena.getLocation().getWorld().getPlayers();
+            for (Player player : players) {
+                if (player.getLocation().distance(arena.getLocation()) <= 25) {
+                    hasPlayerNear = true;
+                    break;
                 }
+            }
+            if (hasPlayerNear) {
                 remainingArenas.remove(arena);
             }
         }

@@ -31,7 +31,7 @@ public class RandomTesourFish {
             Float probability = probabilityMap.floorEntry(skillLevel).getValue();
 
             if (probability <= 0 && vipWorld && level != 12) {
-                probability = 0.1f;
+                probability = 0.001f;
             }
 
             if (isChance(probability)) {

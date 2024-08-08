@@ -1,5 +1,6 @@
 package br.alkazuz.tesouros.engines;
 
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Chest;
@@ -14,10 +15,14 @@ public class ArenaTesouro {
 
     public ArenaTesouro(Location location) {
         this.location = location;
-        for (int x = -5; x <= 5; x++) {
-            for (int z = -5; z <= 5; z++) {
-                for (int y = -5; y <= 5; y++) {
+        for (int x = -15; x <= 15; x++) {
+            for (int z = -15; z <= 15; z++) {
+                for (int y = 0; y <= 15; y++) {
                     Location loc = location.clone().add(x, y, z);
+                    Chunk chunk = location.getChunk();
+                    if (!chunk.isLoaded()) {
+                        chunk.load();
+                    }
                     if (loc.getBlock().getType().name().contains("CHEST")) {
                         chest = (Chest) loc.getBlock().getState();
                     }
@@ -31,6 +36,10 @@ public class ArenaTesouro {
     }
 
     public Chest getChest() {
+        Chunk chunk = chest.getChunk();
+        if (!chunk.isLoaded()) {
+            chunk.load();
+        }
         return chest;
     }
 
