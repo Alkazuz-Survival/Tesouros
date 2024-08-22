@@ -3,9 +3,7 @@ package br.alkazuz.tesouros.entities;
 import br.alkazuz.tesouros.Tesouros;
 import net.minecraft.server.v1_5_R3.*;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_5_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_5_R3.util.UnsafeList;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
@@ -62,29 +60,27 @@ public class CustomEntities {
 
         worldServer.addEntity(entity, CreatureSpawnEvent.SpawnReason.CUSTOM);
 
-       if (entity instanceof EntityCreature) {
-           PathfinderGoalSelector goalSelector = getSelector(entity, "goalSelector");
-           PathfinderGoalSelector targetSelector = getSelector(entity, "targetSelector");
+        if (entity instanceof EntityCreature) {
+            PathfinderGoalSelector goalSelector = getSelector(entity, "goalSelector");
+            PathfinderGoalSelector targetSelector = getSelector(entity, "targetSelector");
 
-           resetTargetSelector(targetSelector);
+            resetTargetSelector(targetSelector);
 
-           if (entity instanceof EntitySkeleton) {
-               EntitySkeleton skeleton = (EntitySkeleton) entity;
-               skeleton.setSkeletonType(0);
-               skeleton.setEquipment(0, new ItemStack(Item.BOW));
+            if (entity instanceof EntitySkeleton) {
+                EntitySkeleton skeleton = (EntitySkeleton) entity;
+                skeleton.setSkeletonType(0);
+                skeleton.setEquipment(0, new ItemStack(Item.BOW));
 
-               goalSelector.a(4, new PathfinderGoalArrowAttack(skeleton, 0.25F, 20, 60, 15.0F));
+                goalSelector.a(4, new PathfinderGoalArrowAttack(skeleton, 0.25F, 20, 60, 15.0F));
 
-               targetSelector.a(1, new PathfinderGoalNearestAttackableTarget(skeleton, EntityHuman.class, 16.0F, 0, true));
+                targetSelector.a(1, new PathfinderGoalNearestAttackableTarget(skeleton, EntityHuman.class, 16.0F, 0, true));
 
-               skeleton.bJ();
-           } else  if (entity instanceof EntitySpider) {
-           } else {
-               setupGoals(goalSelector, targetSelector, entity);
-           }
-       }
-
-
+                skeleton.bJ();
+            } else if (entity instanceof EntitySpider) {
+            } else {
+                setupGoals(goalSelector, targetSelector, entity);
+            }
+        }
     }
 
     private static void setupGoals(PathfinderGoalSelector goalSelector, PathfinderGoalSelector targetSelector, EntityLiving entity) {

@@ -2,6 +2,7 @@ package br.alkazuz.tesouros.config;
 
 import br.alkazuz.tesouros.config.manager.ConfigManager;
 import br.alkazuz.tesouros.util.Serializer;
+import com.gmail.nossr50.datatypes.skills.SkillType;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -13,6 +14,8 @@ public class Settings {
     public static HashMap<Integer, String> TESOUROS_TITLE = new HashMap<>();
     public static HashMap<Integer, TreeMap<Integer, Float>> TESOUROS_PROBABILITY = new HashMap<>();
     public static HashMap<Integer, TreeMap<String, Integer>> TESOUROS_MOBS_LEVELS = new HashMap<>();
+    public static HashMap<SkillType, TreeMap<Integer, Float>> SKILLS_MODIFIERS = new HashMap<>();
+    public static HashMap<Integer, Float> TESOUROS_VIP = new HashMap<>();
     public static Location spawnLocation;
 
     public static void load() {
@@ -22,6 +25,28 @@ public class Settings {
             TESOUROS_PROBABILITY.clear();
             TESOUROS_TITLE.clear();
             TESOUROS_MOBS_LEVELS.clear();
+            SKILLS_MODIFIERS.clear();
+            TESOUROS_VIP.clear();
+
+            if (config.contains("tesouro-vip")) {
+                for (String level : config.getConfigurationSection("tesouro-vip").getKeys(false)) {
+                    TESOUROS_VIP.put(Integer.parseInt(level), (float) config.getDouble("tesouro-vip." + level));
+                }
+            }
+
+            if (config.contains("modifier-skills")) {
+                for (String skill : config.getConfigurationSection("modifier-skills").getKeys(false)) {
+                    SkillType skillType = SkillType.valueOf(skill.toUpperCase());
+                    TreeMap<Integer, Float> probabilityMap = new TreeMap<>();
+                    for (String levelStr : config.getConfigurationSection("modifier-skills." + skill).getKeys(false)) {
+                        int level = Integer.parseInt(levelStr);
+                        float value = (float) config.getDouble("modifier-skills." + skill + "." + levelStr);
+                        probabilityMap.put(level, value);
+                    }
+                    SKILLS_MODIFIERS.put(skillType, probabilityMap);
+                }
+            }
+
             for (String key : config.getConfigurationSection("books-title").getKeys(false)) {
                 TESOUROS_TITLE.put(Integer.parseInt(key), config.getString("books-title." + key).replace("&", "§"));
             }
