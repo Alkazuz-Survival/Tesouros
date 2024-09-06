@@ -9,9 +9,7 @@ softdepend:
 commands:
   tesourosadmin:
     description: Comando principal do plugin
-    permission: tesouros.admin
   tesouros:
     description: Comando principal do plugin
     aliases:
       - tesouro
-    permission: tesouros.use

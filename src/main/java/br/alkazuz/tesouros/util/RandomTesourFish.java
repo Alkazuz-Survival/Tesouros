@@ -4,7 +4,6 @@ import br.alkazuz.tesouros.config.Settings;
 import com.gmail.nossr50.datatypes.player.PlayerProfile;
 import com.gmail.nossr50.datatypes.skills.SkillType;
 import com.gmail.nossr50.util.player.UserManager;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
@@ -42,7 +41,6 @@ public class RandomTesourFish {
                 Float skillModifier = skillModifiers.get(level);
                 probability *= skillModifier;
             }
-            Enchantment.KNOCKBACK.getName();
             if (isChance(probability)) {
                 if (level == 12) {
                     if (!hasAllSkillsInLevel(player, 500)) {

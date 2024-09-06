@@ -11,6 +11,7 @@ import java.util.TreeMap;
 
 public class Settings {
 
+    public static String WORLD;
     public static HashMap<Integer, String> TESOUROS_TITLE = new HashMap<>();
     public static HashMap<Integer, TreeMap<Integer, Float>> TESOUROS_PROBABILITY = new HashMap<>();
     public static HashMap<Integer, TreeMap<String, Integer>> TESOUROS_MOBS_LEVELS = new HashMap<>();
@@ -22,6 +23,7 @@ public class Settings {
         try {
             FileConfiguration config = ConfigManager
                     .getConfig("settings");
+            WORLD = config.getString("world");
             TESOUROS_PROBABILITY.clear();
             TESOUROS_TITLE.clear();
             TESOUROS_MOBS_LEVELS.clear();

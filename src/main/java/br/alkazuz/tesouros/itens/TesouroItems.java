@@ -9,31 +9,56 @@ public class TesouroItems {
 
     public static ItemStack
             LEVEL_1,
-        LEVEL_2,
-        LEVEL_3,
-        LEVEL_4,
-        LEVEL_5,
-        LEVEL_6,
-        LEVEL_7,
-        LEVEL_8,
-        LEVEL_9,
-        LEVEL_10,
-        LEVEL_11,
-        LEVEL_12;
+            LEVEL_2,
+            LEVEL_3,
+            LEVEL_4,
+            LEVEL_5,
+            LEVEL_6,
+            LEVEL_7,
+            LEVEL_8,
+            LEVEL_9,
+            LEVEL_10,
+            LEVEL_11,
+            LEVEL_12;
 
     public static void init() {
-        LEVEL_1 = new ItemBuilder(Material.BOOK).setName(Settings.TESOUROS_TITLE.get(1)).toItemStack();
-        LEVEL_2 = new ItemBuilder(Material.BOOK).setName(Settings.TESOUROS_TITLE.get(2)).toItemStack();
-        LEVEL_3 = new ItemBuilder(Material.BOOK).setName(Settings.TESOUROS_TITLE.get(3)).toItemStack();
-        LEVEL_4 = new ItemBuilder(Material.BOOK).setName(Settings.TESOUROS_TITLE.get(4)).toItemStack();
-        LEVEL_5 = new ItemBuilder(Material.BOOK).setName(Settings.TESOUROS_TITLE.get(5)).toItemStack();
-        LEVEL_6 = new ItemBuilder(Material.BOOK).setName(Settings.TESOUROS_TITLE.get(6)).toItemStack();
-        LEVEL_7 = new ItemBuilder(Material.BOOK).setName(Settings.TESOUROS_TITLE.get(7)).toItemStack();
-        LEVEL_8 = new ItemBuilder(Material.BOOK).setName(Settings.TESOUROS_TITLE.get(8)).toItemStack();
-        LEVEL_9 = new ItemBuilder(Material.BOOK).setName(Settings.TESOUROS_TITLE.get(9)).toItemStack();
-        LEVEL_10 = new ItemBuilder(Material.BOOK).setName(Settings.TESOUROS_TITLE.get(10)).toItemStack();
-        LEVEL_11 = new ItemBuilder(Material.BOOK).setName(Settings.TESOUROS_TITLE.get(11)).toItemStack();
-        LEVEL_12 = new ItemBuilder(Material.BOOK).setName(Settings.TESOUROS_TITLE.get(12)).toItemStack();
+        LEVEL_1 = new ItemBuilder(Material.BOOK)
+                .addLoreLine("")
+                .addLoreLine("§eBotão Direito para abrir")
+                .setName(Settings.TESOUROS_TITLE.get(1)).toItemStack();
+        LEVEL_2 = new ItemBuilder(Material.BOOK)
+                .addLoreLine("")
+                .addLoreLine("§eBotão Direito para abrir").setName(Settings.TESOUROS_TITLE.get(2)).toItemStack();
+        LEVEL_3 = new ItemBuilder(Material.BOOK)
+                .addLoreLine("")
+                .addLoreLine("§eBotão Direito para abrir").setName(Settings.TESOUROS_TITLE.get(3)).toItemStack();
+        LEVEL_4 = new ItemBuilder(Material.BOOK)
+                .addLoreLine("")
+                .addLoreLine("§eBotão Direito para abrir").setName(Settings.TESOUROS_TITLE.get(4)).toItemStack();
+        LEVEL_5 = new ItemBuilder(Material.BOOK)
+                .addLoreLine("")
+                .addLoreLine("§eBotão Direito para abrir").setName(Settings.TESOUROS_TITLE.get(5)).toItemStack();
+        LEVEL_6 = new ItemBuilder(Material.BOOK)
+                .addLoreLine("")
+                .addLoreLine("§eBotão Direito para abrir").setName(Settings.TESOUROS_TITLE.get(6)).toItemStack();
+        LEVEL_7 = new ItemBuilder(Material.BOOK)
+                .addLoreLine("")
+                .addLoreLine("§eBotão Direito para abrir").setName(Settings.TESOUROS_TITLE.get(7)).toItemStack();
+        LEVEL_8 = new ItemBuilder(Material.BOOK)
+                .addLoreLine("")
+                .addLoreLine("§eBotão Direito para abrir").setName(Settings.TESOUROS_TITLE.get(8)).toItemStack();
+        LEVEL_9 = new ItemBuilder(Material.BOOK)
+                .addLoreLine("")
+                .addLoreLine("§eBotão Direito para abrir").setName(Settings.TESOUROS_TITLE.get(9)).toItemStack();
+        LEVEL_10 = new ItemBuilder(Material.BOOK)
+                .addLoreLine("")
+                .addLoreLine("§eBotão Direito para abrir").setName(Settings.TESOUROS_TITLE.get(10)).toItemStack();
+        LEVEL_11 = new ItemBuilder(Material.BOOK)
+                .addLoreLine("")
+                .addLoreLine("§eBotão Direito para abrir").setName(Settings.TESOUROS_TITLE.get(11)).toItemStack();
+        LEVEL_12 = new ItemBuilder(Material.BOOK)
+                .addLoreLine("")
+                .addLoreLine("§eBotão Direito para abrir").setName(Settings.TESOUROS_TITLE.get(12)).toItemStack();
     }
 
     public static ItemStack getTesouro(int level) {

@@ -23,9 +23,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -90,6 +93,12 @@ public class TesouroOpening implements Listener {
         for (Entity entity : getEntities()) {
             entity.remove();
         }
+
+        if (taskTimeout != null) {
+            Bukkit.getScheduler().cancelTask(taskTimeout);
+            taskTimeout = null;
+        }
+
         if (player.isOnline() && Settings.spawnLocation != null)
             player.teleport(Settings.spawnLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
     }
@@ -98,9 +107,9 @@ public class TesouroOpening implements Listener {
         if (taskTimeout != null) Bukkit.getScheduler().cancelTask(taskTimeout);
         List<TesouroItem> tesouroItems = TesouroItemGenerator.generateTesouroItems(maxLevel);
         for (TesouroItem tesouroItem : tesouroItems) {
-            CorreioItem correioItem = new CorreioItem(tesouroItem.getItemStack(), "CoreMC", player.getName());
-            CorreioItemManager.addCorreioItem(player.getName(), correioItem);
+            CorreioItem correioItem = new CorreioItem(tesouroItem.getItemStack(), "Raizlandia", player.getName());
             correioItem.save();
+            CorreioItemManager.addCorreioItem(player.getName(), correioItem);
         }
 
         player.sendMessage("§aVocê venceu o tesouro e recebeu os itens no correio.");
@@ -185,15 +194,54 @@ public class TesouroOpening implements Listener {
     public void start() {
         player.teleport(arenaTesouro.getLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
         Bukkit.broadcastMessage("§3[Tesouros] §a" + player.getDisplayName() + " §7está abrindo um Tesouro Nível §a" + maxLevel + "§7.");
+
+        for (Entity entity : arenaTesouro.getLocation().getWorld().getEntities()) {
+            if (entity instanceof LivingEntity && !(entity instanceof Player)) {
+                LivingEntity livingEntity = (LivingEntity) entity;
+                if (livingEntity.getLocation().distance(arenaTesouro.getLocation()) < 15) {
+                    entity.remove();
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onDeath(PlayerDeathEvent event) {
+        if (event.getEntity() != player) return;
+        finish();
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onRespawn(PlayerRespawnEvent event) {
+        if (event.getPlayer() != player) return;
+        if (Settings.spawnLocation == null) return;
+        event.setRespawnLocation(Settings.spawnLocation);
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         if (event.getPlayer() != player) return;
-        CorreioItem correioItem = new CorreioItem(TesouroItems.getTesouro(maxLevel), "CoreMC", player.getName());
-        CorreioItemManager.addCorreioItem(player.getName(), correioItem);
+        CorreioItem correioItem = new CorreioItem(TesouroItems.getTesouro(maxLevel), "Raizlandia", player.getName());
         correioItem.save();
+        CorreioItemManager.addCorreioItem(player.getName(), correioItem);
         finish();
+
+        if (Settings.spawnLocation == null) return;
+
+        player.teleport(Settings.spawnLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
+    }
+
+    @EventHandler
+    public void onChunkUnload(ChunkUnloadEvent event) {
+        if (event.getChunk().getWorld() != arenaTesouro.getLocation().getWorld()) {
+            return;
+        }
+
+        for (Entity entity : event.getChunk().getEntities()) {
+            if (entity instanceof LivingEntity && !(entity instanceof Player)) {
+                entity.remove();
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

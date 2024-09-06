@@ -25,7 +25,7 @@ public class PlayerInteractListener implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        if (!event.getPlayer().getWorld().getName().equals("tesouros")) {
+        if (!event.getPlayer().getWorld().getName().equals(Settings.WORLD)) {
             return;
         }
         if (Settings.spawnLocation == null) return;
@@ -34,7 +34,7 @@ public class PlayerInteractListener implements Listener {
 
     @EventHandler
     public void onPlace(BlockPlaceEvent event) {
-        if (!event.getPlayer().getWorld().getName().equals("tesouros")) {
+        if (!event.getPlayer().getWorld().getName().equals(Settings.WORLD)) {
             return;
         }
 
@@ -47,7 +47,7 @@ public class PlayerInteractListener implements Listener {
 
     @EventHandler
     public void onBreak(BlockBreakEvent event) {
-        if (!event.getPlayer().getWorld().getName().equals("tesouros")) {
+        if (!event.getPlayer().getWorld().getName().equals(Settings.WORLD)) {
             return;
         }
 
@@ -60,7 +60,7 @@ public class PlayerInteractListener implements Listener {
 
     @EventHandler
     public void onEntityItensSpawn(EntitySpawnEvent event) {
-        if (!event.getLocation().getWorld().getName().equals("tesouros")) {
+        if (!event.getLocation().getWorld().getName().equals(Settings.WORLD)) {
             return;
         }
 
@@ -99,7 +99,7 @@ public class PlayerInteractListener implements Listener {
             return;
         }
 
-        if (event.getPlayer().getWorld().getName().equals("tesouros")) {
+        if (event.getPlayer().getWorld().getName().equals(Settings.WORLD)) {
             return;
         }
 
