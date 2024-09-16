@@ -42,7 +42,7 @@ public class mcMMOListener implements Listener {
 
             tesouroDelay.put(event.getPlayer().getName(), System.currentTimeMillis() + 60000 * 10);
         } else {
-            tesouroDelay.put(event.getPlayer().getName(), System.currentTimeMillis() + 60000 * 5);
+            //tesouroDelay.put(event.getPlayer().getName(), System.currentTimeMillis() + 60000 * 5);
         }
 
     }

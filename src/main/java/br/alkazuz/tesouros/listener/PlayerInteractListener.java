@@ -25,11 +25,13 @@ public class PlayerInteractListener implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        if (!event.getPlayer().getWorld().getName().equals(Settings.WORLD)) {
-            return;
-        }
-        if (Settings.spawnLocation == null) return;
-        event.getPlayer().teleport(Settings.spawnLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Tesouros.getInstance(), () -> {
+            if (!event.getPlayer().getWorld().getName().equals(Settings.WORLD)) {
+                return;
+            }
+            if (Settings.spawnLocation == null) return;
+            event.getPlayer().teleport(Settings.spawnLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
+        }, 20L);
     }
 
     @EventHandler

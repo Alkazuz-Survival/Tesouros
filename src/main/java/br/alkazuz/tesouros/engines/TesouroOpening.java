@@ -33,11 +33,13 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TesouroOpening implements Listener {
     private final Player player;
     private final UUID uuid = UUID.randomUUID();
     private final ArenaTesouro arenaTesouro;
+    private Integer taskSpawningMob = null;
     private int currentLevel;
     private final int maxLevel;
     private long interactLong;
@@ -120,13 +122,29 @@ public class TesouroOpening implements Listener {
     }
 
     public void spawnMobs() {
+        if (taskSpawningMob != null) {
+            Bukkit.getScheduler().cancelTask(taskSpawningMob);
+            taskSpawningMob = null;
+        }
         TreeMap<String, Integer> mobsCountMap = Settings.TESOUROS_MOBS_LEVELS.get(currentLevel);
         if (mobsCountMap == null) {
             return;
         }
-        for (Map.Entry<String, Integer> entry : mobsCountMap.entrySet()) {
+
+        AtomicInteger indexEntry = new AtomicInteger(0);
+
+        taskSpawningMob = Bukkit.getScheduler().scheduleSyncRepeatingTask(Tesouros.getInstance(), () -> {
+            if (indexEntry.get() >= mobsCountMap.size()) {
+                Bukkit.getScheduler().cancelTask(taskSpawningMob);
+                taskSpawningMob = null;
+                return;
+            }
+
+            Map.Entry<String, Integer> entry = (Map.Entry<String, Integer>) mobsCountMap.entrySet().toArray()[indexEntry.get()];
+
             String mobName = entry.getKey();
             int mobCount = entry.getValue();
+
             switch (mobName) {
                 case "witches":
                     for (int i = 0; i < mobCount; i++) {
@@ -165,7 +183,9 @@ public class TesouroOpening implements Listener {
                     }
                     break;
             }
-        }
+
+            indexEntry.getAndIncrement();
+        }, 0, 1L);
     }
 
     private List<LivingEntity> getEntities() {

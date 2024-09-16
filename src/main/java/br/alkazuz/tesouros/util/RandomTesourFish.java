@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class RandomTesourFish {
+    private static Long lastTesouro = 0L;
 
     private static boolean hasAllSkillsInLevel(Player player, int level) {
         for (SkillType skill : SkillType.values()) {
@@ -23,7 +24,12 @@ public class RandomTesourFish {
     }
 
     public static Integer getRandomTesouro(Player player, SkillType skillType, int skillLevel) {
+        if (System.currentTimeMillis() - lastTesouro < 500) {
+            return null;
+        }
         boolean vipWorld = player.getWorld().getName().equals("vip");
+
+        lastTesouro = System.currentTimeMillis();
 
         for (Map.Entry<Integer, TreeMap<Integer, Float>> entry : Settings.TESOUROS_PROBABILITY.entrySet()) {
             int level = entry.getKey();
@@ -39,7 +45,8 @@ public class RandomTesourFish {
             if (Settings.SKILLS_MODIFIERS.containsKey(skillType)) {
                 TreeMap<Integer, Float> skillModifiers = Settings.SKILLS_MODIFIERS.get(skillType);
                 Float skillModifier = skillModifiers.get(level);
-                probability *= skillModifier;
+                if (skillModifier != null)
+                    probability *= skillModifier;
             }
             if (isChance(probability)) {
                 if (level == 12) {

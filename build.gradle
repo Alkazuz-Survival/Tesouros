@@ -22,12 +22,14 @@ dependencies {
     implementation files('D:\\server 1.5.2 - Copia\\plugins\\Vault.jar')
     implementation files('D:\\server 1.5.2 - Copia\\plugins\\mcMMO.jar')
     implementation files('D:\\server 1.5.2 - Copia\\plugins\\Correio-1.0.jar')
+
+    implementation files('D:\\server 1.5.2 - Copia (2)\\plugins\\ChestShop.jar')
     implementation files('D:\\server 1.5.2 - Copia\\plugins\\PluginAntiCheat-1.0-SNAPSHOT.jar')
 }
 
 jar {
     archiveBaseName = project.name
-    archiveVersion = project.version
+    archiveVersion = '1.0'
     archiveClassifier = ''
     destinationDirectory = file("D:\\server 1.5.2 - Copia (2)\\plugins")
 }
