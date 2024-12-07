@@ -26,7 +26,7 @@ public class mcMMOListener implements Listener {
         Integer randomLevel = RandomTesourFish.getRandomTesouro(event.getPlayer(), event.getSkill(), event.getSkillLevel());
         if (randomLevel != null) {
             ItemStack item = TesouroItems.getTesouro(randomLevel).clone();
-            CorreioItem correioItem = new CorreioItem(item, "Raizlandia", event.getPlayer().getName());
+            CorreioItem correioItem = new CorreioItem(item, "Nightcraft", event.getPlayer().getName());
 
             correioItem.save();
 

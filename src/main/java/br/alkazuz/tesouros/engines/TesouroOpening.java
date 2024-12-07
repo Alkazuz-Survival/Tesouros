@@ -109,7 +109,7 @@ public class TesouroOpening implements Listener {
         if (taskTimeout != null) Bukkit.getScheduler().cancelTask(taskTimeout);
         List<TesouroItem> tesouroItems = TesouroItemGenerator.generateTesouroItems(maxLevel);
         for (TesouroItem tesouroItem : tesouroItems) {
-            CorreioItem correioItem = new CorreioItem(tesouroItem.getItemStack(), "Raizlandia", player.getName());
+            CorreioItem correioItem = new CorreioItem(tesouroItem.getItemStack(), "Nightcraft", player.getName());
             correioItem.save();
             CorreioItemManager.addCorreioItem(player.getName(), correioItem);
         }
@@ -241,7 +241,7 @@ public class TesouroOpening implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         if (event.getPlayer() != player) return;
-        CorreioItem correioItem = new CorreioItem(TesouroItems.getTesouro(maxLevel), "Raizlandia", player.getName());
+        CorreioItem correioItem = new CorreioItem(TesouroItems.getTesouro(maxLevel), "Nightcraft", player.getName());
         correioItem.save();
         CorreioItemManager.addCorreioItem(player.getName(), correioItem);
         finish();

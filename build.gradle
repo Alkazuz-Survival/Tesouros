@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'br.alkazuz'
-version = '1.0-SNAPSHOT'
+version = '1.1-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -18,18 +18,19 @@ repositories {
 }
 
 dependencies {
-    implementation files('D:\\server 1.5.2 - Copia\\Spigot-1.0-SNAPSHOT.jar')
-    implementation files('D:\\server 1.5.2 - Copia\\plugins\\Vault.jar')
-    implementation files('D:\\server 1.5.2 - Copia\\plugins\\mcMMO.jar')
-    implementation files('D:\\server 1.5.2 - Copia\\plugins\\Correio-1.0.jar')
+    implementation files('E:\\server 1.5.2 - Copia\\Spigot-1.0-SNAPSHOT.jar')
+    implementation files('E:\\server 1.5.2 - Copia\\plugins\\Vault.jar')
+    implementation files('E:\\server 1.5.2 - Copia\\plugins\\mcMMO.jar')
+    implementation files('E:\\server 1.5.2 - Copia\\plugins\\Correio-1.0.jar')
 
-    implementation files('D:\\server 1.5.2 - Copia (2)\\plugins\\ChestShop.jar')
-    implementation files('D:\\server 1.5.2 - Copia\\plugins\\PluginAntiCheat-1.0-SNAPSHOT.jar')
+    implementation files('E:\\server 1.5.2 - Copia (2)\\plugins\\ChestShop.jar')
+    implementation files('E:\\server 1.5.2 - Copia\\plugins\\PluginAntiCheat-1.0-SNAPSHOT.jar')
+    implementation files('E:\\server 1.5.2 - Copia\\plugins\\yLockAntiCheat.jar')
 }
 
 jar {
     archiveBaseName = project.name
-    archiveVersion = '1.0'
+    archiveVersion = project.version
     archiveClassifier = ''
     destinationDirectory = file("D:\\server 1.5.2 - Copia (2)\\plugins")
 }

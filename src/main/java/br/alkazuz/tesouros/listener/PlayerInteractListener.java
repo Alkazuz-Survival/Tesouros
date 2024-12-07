@@ -4,8 +4,10 @@ import br.alkazuz.sunshine.anticheat.data.AntiCheatDataManager;
 import br.alkazuz.tesouros.Tesouros;
 import br.alkazuz.tesouros.config.Settings;
 import br.alkazuz.tesouros.gui.MenuConfirmOpen;
+import br.alkazuz.tesouros.hooks.LockAntiCheatHook;
 import br.alkazuz.tesouros.hooks.SunshineHook;
 import br.alkazuz.tesouros.itens.TesouroItems;
+import dev.lock.AntiCheat;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -110,6 +112,12 @@ public class PlayerInteractListener implements Listener {
                 event.setCancelled(true);
                 if (SunshineHook.enabled) {
                     if (!AntiCheatDataManager.isValidAntiCheatData(event.getPlayer().getName())) {
+                        event.getPlayer().sendMessage("§cVocê só pode abrir tesouros com o antihack instalado");
+                        return;
+                    }
+                }
+                if (LockAntiCheatHook.enabled) {
+                    if (!AntiCheat.getInstance().checked.contains(event.getPlayer())) {
                         event.getPlayer().sendMessage("§cVocê só pode abrir tesouros com o antihack instalado");
                         return;
                     }

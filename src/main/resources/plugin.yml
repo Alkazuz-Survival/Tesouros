@@ -6,6 +6,7 @@ softdepend:
   - mcMMO
   - Vault
   - SunshineAntiHack
+  - yLockAntiCheat
 commands:
   tesourosadmin:
     description: Comando principal do plugin

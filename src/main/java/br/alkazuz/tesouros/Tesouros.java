@@ -8,6 +8,7 @@ import br.alkazuz.tesouros.config.manager.ConfigManager;
 import br.alkazuz.tesouros.gui.GuiEditTesouroItems;
 import br.alkazuz.tesouros.gui.GuiShowTesouroItems;
 import br.alkazuz.tesouros.gui.MenuConfirmOpen;
+import br.alkazuz.tesouros.hooks.LockAntiCheatHook;
 import br.alkazuz.tesouros.hooks.SunshineHook;
 import br.alkazuz.tesouros.items.TesouroItemManager;
 import br.alkazuz.tesouros.itens.TesouroItems;
@@ -33,6 +34,7 @@ public final class Tesouros extends JavaPlugin {
 
         loadListeners();
         SunshineHook.init();
+        LockAntiCheatHook.init();
         eventWaiter = new EventWaiter(this);
         eventWaiter.addEvents(AsyncPlayerChatEvent.class, InventoryClickEvent.class);
 
